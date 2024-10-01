@@ -1,5 +1,5 @@
-from src.tools.rag_agent import RAGAgent
-from src.tools.form_agent import FormAgent
+from src.tools import RAGAgent, FormAgent, OrchAgent
+
 from llama_deploy import (
     deploy_workflow,
     WorkflowServiceConfig,
@@ -14,6 +14,9 @@ form_agent = form_agent_obj.get_agent()
 
 rag_agent_obj = RAGAgent()
 rag_agent = rag_agent_obj.get_agent()
+
+orch_agent_obj = OrchAgent()
+orch_agent = orch_agent_obj.get_agent()
 
 class Formflow(Workflow):
     @step()
@@ -38,6 +41,19 @@ class RAGflow(Workflow):
             result = "Enter the input for variable query"
         
         return StopEvent(result=result)
+    
+class Orchflow(Workflow):
+    @step()
+    async def run_step(self, ev: StartEvent) -> StopEvent:
+        
+        query= str(ev.get("query", ""))
+        if len(query) != 0:
+            result = orch_agent.chat(query)
+        else:
+            result = "Enter the input for variable query"
+        
+        return StopEvent(result=result)
+
 
 async def main():
     form_task = asyncio.create_task(
@@ -60,7 +76,17 @@ async def main():
         )
     )
 
-    await asyncio.gather(form_task, rag_task)
+    orch_task = asyncio.create_task(
+        deploy_workflow(
+            Orchflow(),
+            WorkflowServiceConfig(
+                host="127.0.0.1", port=8004, service_name="orch_agent"
+            ),
+            ControlPlaneConfig(),
+        )
+    )
+
+    await asyncio.gather(form_task, rag_task, orch_task)
 
 
 if __name__ == "__main__":
