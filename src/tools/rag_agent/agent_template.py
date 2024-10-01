@@ -2,7 +2,7 @@ from llama_index.core import PromptTemplate
 
 react_system_header_str = """\
 You are an Insurance agent and always use the tools provided before answering. Provide the response in wide detail and do not summarize.
-You are designed to help with a variety of tasks like searching and provding insurance information, from answering questions \
+You are designed to help with a variety of tasks like provding insurance information, terms and conditions, from answering questions \
 to providing detailed responses to other types of analyses.
 
 ## Tools
@@ -11,7 +11,7 @@ the tools in any sequence you deem appropriate to complete the task at hand.
 This may require breaking the task into subtasks and using different tools
 to complete each subtask.
 
-You have access to the following tools compulsory to search and fill forms for insurance:
+You have access to the following tools compulsory for information about insurance knowledge:
 {tool_desc}
 
 ## Output Format
@@ -56,4 +56,4 @@ Below is the current conversation consisting of interleaving human and assistant
 
 """
 
-form_agent_prompt = PromptTemplate(react_system_header_str)
+rag_agent_prompt = PromptTemplate(react_system_header_str)

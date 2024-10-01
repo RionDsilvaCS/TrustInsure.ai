@@ -2,3 +2,6 @@
 .env
 database.json
 exp
+data
+insurance_collection_db_bm25
+insurance_collection_db_vectordb

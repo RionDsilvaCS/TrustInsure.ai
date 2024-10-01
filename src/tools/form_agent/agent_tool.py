@@ -54,7 +54,7 @@ def bike_insurance_claim_tool(
         policy_report_number: str = None,
         bike_make: str = None,
         bike_model: str = None,
-        bike_year: str = None,
+        bike_year = None,
         **kwargs
     ) -> Dict:
     """Apply to claim bike insurance claim.
@@ -103,7 +103,7 @@ def bike_insurance_claim_tool(
         "vehicleDetails": {
           "make": bike_make,
           "model": bike_model,
-          "year": bike_year
+          "year": str(bike_year)
         },
         "incidentDetails": incident_details,
         "policeReportNumber": policy_report_number,
